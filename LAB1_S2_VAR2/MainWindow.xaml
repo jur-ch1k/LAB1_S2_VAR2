@@ -26,11 +26,35 @@
         <Label Margin="593,10,71,147" Content="Настройка SplineData"/>
 
         <Label  Grid.Row="0" Margin="10,58,692,99" Width="NaN" Content="Число узлов:" />
-        <TextBox x:Name="node_num" Grid.Row="0"  Height="NaN" Margin="113,61,565,102" Width="NaN" Text="{Binding NodesNum}"/>
+        <TextBox x:Name="node_num" Grid.Row="0"  Height="NaN" Margin="113,61,565,102" Width="NaN" Validation.Error="TextBlock_Error">
+            <TextBox.Text>
+                <Binding Path="NodesNum" NotifyOnValidationError="True">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
         <Label Grid.Row="0" Margin="10,99,692,58" Width="NaN" Content="Лев. граница:" />
-        <TextBox x:Name="left_end" Grid.Row="0"  Height="NaN" Margin="113,102,565,61" Width="NaN" Text="{Binding LEnd}"/>
-        <Label Grid.Row="0" Margin="10,140,692,17" Width="NaN" Content="Прав. граница:" />
-        <TextBox x:Name="right_end" Grid.Row="0"  Height="NaN" Margin="113,143,565,21" Width="NaN" Text="{Binding REnd}"/>
+        <TextBox x:Name="left_end" Grid.Row="0"  Height="NaN" Margin="113,102,565,61" Width="NaN" Validation.Error="TextBlock_Error">
+            <TextBox.Text>
+                <Binding Path="LEnd" NotifyOnValidationError="True">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+            <Label Grid.Row="0" Margin="10,140,692,17" Width="NaN" Content="Прав. граница:" />
+        <TextBox x:Name="right_end" Grid.Row="0"  Height="NaN" Margin="113,143,565,21" Width="NaN" Validation.Error="TextBlock_Error">
+            <TextBox.Text>
+                <Binding Path="REnd" NotifyOnValidationError="True">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
         <StackPanel Grid.Row="0" Margin="277,58,315,69">
             <Label Width="NaN" Content="Тип сетки:" />
@@ -42,7 +66,15 @@
             <ComboBox x:Name="init_type" SelectedItem = "{Binding FuncType}"/>
         </StackPanel>
         <Label  Grid.Row="0" Margin="522,58,162,99" Width="NaN" Content="Число узлов:" />
-        <TextBox x:Name="slpine_node_num" Grid.Row="0"  Height="NaN" Margin="648,61,30,102" Width="NaN" Text="{Binding SplineNodesNum}"/>
+        <TextBox x:Name="slpine_node_num" Grid.Row="0" Height="NaN" Margin="648,61,30,102" Width="NaN" Validation.Error="TextBlock_Error">
+            <TextBox.Text>
+                <Binding Path="SplineNodesNum" NotifyOnValidationError="True">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
         <Label  Grid.Row="0" Margin="522,99,158,58" Width="NaN" Content="2я производная:" />
         <TextBox x:Name="ders" Grid.Row="0"  Height="NaN" Margin="648,102,30,61" Width="NaN">
             <TextBox.Text>

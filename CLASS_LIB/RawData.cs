@@ -39,20 +39,18 @@ namespace CLASS_LIB {
                 if (isUnuform)
                     Coord[i] = Ends[0] + step * i;
                 else {
-                    if (Ends[0] + step * i + new Random().NextDouble() < Ends[1])
-                        Coord[i] = Ends[0] + step * i + new Random().NextDouble();
-                    else
-                        Coord[i] = Ends[1];
+                    Coord[i] = new Random().NextDouble() * (Ends[1] - Ends[0]) + Ends[0];
+                    //if (Ends[0] + step * i + new Random().NextDouble() < Ends[1])
+                    //    Coord[i] = Ends[0] + step * i + new Random().NextDouble();
+                    //else
+                    //    Coord[i] = Ends[1];
                 }
                 Val[i] = func(Coord[i]);
             }
-            if (isUnuform) {
-                Coord[NumOfNodes - 1] = ends[1];
-                Val[NumOfNodes - 1] = func(Coord[NumOfNodes - 1]);
-            }
-            else {
-                Coord[NumOfNodes - 1] = ends[1];
-                Val[NumOfNodes - 1] = func(Coord[NumOfNodes - 1]);
+            Coord[NumOfNodes - 1] = ends[1];
+            Val[NumOfNodes - 1] = func(Coord[NumOfNodes - 1]);
+            if (!isUnuform) {
+               Coord = Coord.OrderBy(x => x).ToArray();
             }
         }
         public RawData(string filename) {

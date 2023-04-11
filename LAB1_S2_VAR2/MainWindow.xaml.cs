@@ -69,7 +69,7 @@ namespace LAB1_S2_VAR2 {
 
             try {
                 viewData.Load(dialog.FileName);
-                viewData.ExiquteSpline();
+                viewData.ExiquteSpline(false);
                 integral.Text = viewData.Spline.IntergralVal.ToString();
 
                 string[] info = new string[viewData.NodesNum];
@@ -86,6 +86,12 @@ namespace LAB1_S2_VAR2 {
                 MessageBoxResult result;
                 result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
             }
+        }
+        private void TextBlock_Error(object sender, ValidationErrorEventArgs e) {
+            MessageBox.Show(e.Error.ErrorContent.ToString(), "Ошибочка", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.Yes);
+            //if (sender == null) sender = 1;
+            //var r = typeof(sender);
+            //((TextBox)sender).Text = "";
         }
     }
 }

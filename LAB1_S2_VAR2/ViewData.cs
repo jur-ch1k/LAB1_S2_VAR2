@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Documents;
 
 namespace LAB1_S2_VAR2 {
-    public class ViewData : INotifyPropertyChanged {
+    public class ViewData : INotifyPropertyChanged, IDataErrorInfo {
         public event PropertyChangedEventHandler PropertyChanged;
         //для RawData
         private int nodesnum;
@@ -70,6 +70,34 @@ namespace LAB1_S2_VAR2 {
                 OnPropertyChanged("Spline");
             }
         }
+
+        public string Error => throw new NotImplementedException();
+
+        public string this[string columnName] { 
+            get { 
+                string error = string.Empty;
+                switch (columnName) {
+                    case "NodesNum":
+                        if (NodesNum < 2)
+                            error = "Число узлов должно быть >= 2!";
+                        break;
+                    case "SplineNodesNum":
+                        if (SplineNodesNum < 2)
+                            error = "Число узлов должно быть >= 2!";
+                        break;
+                    case "LEnd":
+                        if (LEnd >= REnd)
+                            error = "Левый конец отрезка должен быть строго меньше, чем правый!";
+                        break;
+                    case "REnd":
+                        if (REnd <= LEnd)
+                            error = "Правый конец отрезка должен быть строго больше, чем левый!";
+                        break;
+                }
+                return error;
+            } 
+        }
+
         public void Save(string filename) {
             double[] Ends = new double[] { LEnd, REnd };
             RawData rawData =  new RawData(Ends, NodesNum, IsUnuform, FuncType);
@@ -113,8 +141,9 @@ namespace LAB1_S2_VAR2 {
             Raw = new RawData(Ends, NodesNum, IsUnuform, FuncType);
         }
 
-        public void ExiquteSpline() {
-            CreateRawData();
+        public void ExiquteSpline(bool createRawData = true) {
+            if (createRawData)
+                CreateRawData();
             SplineData splineData = new SplineData(Raw, LeftSndDer, RightSndDer, SplineNodesNum);
             splineData.Spline();
             Spline = splineData;
