@@ -10,13 +10,10 @@ using System.Windows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Documents;
-using System.Windows.Input;
 
 namespace LAB1_S2_VAR2 {
-    public class ViewData : INotifyPropertyChanged, IDataErrorInfo, ICommand {
+    public class ViewData : INotifyPropertyChanged, IDataErrorInfo,  {
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler? CanExecuteChanged;
-
         //для RawData
         private int nodesnum;
         public int NodesNum { 
@@ -153,14 +150,6 @@ namespace LAB1_S2_VAR2 {
         }
         protected void OnPropertyChanged([CallerMemberName] string name = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        public bool CanExecute(object? parameter) {
-            throw new NotImplementedException();
-        }
-
-        public void Execute(object? parameter) {
-            throw new NotImplementedException();
         }
     }
     
