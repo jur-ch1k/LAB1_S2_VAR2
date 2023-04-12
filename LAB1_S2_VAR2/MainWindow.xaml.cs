@@ -25,8 +25,20 @@ namespace LAB1_S2_VAR2 {
         public MainWindow() {
             InitializeComponent();
             this.DataContext = viewData;
-
+            
             init_type.ItemsSource = Enum.GetValues(typeof(FRawEnum));
+        }
+
+        public class command : ICommand {
+            public event EventHandler? CanExecuteChanged;
+
+            public bool CanExecute(object? parameter) {
+                throw new NotImplementedException();
+            }
+
+            public void Execute(object? parameter) {
+                throw new NotImplementedException();
+            }
         }
 
         private void create_Click(object sender, RoutedEventArgs e) {
