@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CLASS_LIB;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LAB1_S2_VAR2 {
     /// <summary>
@@ -99,11 +100,32 @@ namespace LAB1_S2_VAR2 {
                 result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
             }
         }
-        private void TextBlock_Error(object sender, ValidationErrorEventArgs e) {
-            MessageBox.Show(e.Error.ErrorContent.ToString(), "Ошибочка", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.Yes);
-            //if (sender == null) sender = 1;
-            //var r = typeof(sender);
-            //((TextBox)sender).Text = "";
+        private void CanAddCommandHandler(object sender, CanExecuteRoutedEventArgs e) {
+            if (grid != null) {
+                foreach (FrameworkElement child in grid.Children) {
+                    if (Validation.GetHasError(child) == true) {
+                        e.CanExecute = false;
+                        return;
+                    }
+                    e.CanExecute = true;
+                }
+            }
+            else e.CanExecute = false;
         }
+        private void AddCommandHandler(object sender, ExecutedRoutedEventArgs e) {
+            throw new NotImplementedException();
+        }
+
+        private void TestCommandHandler(object sender, ExecutedRoutedEventArgs e) {
+            MessageBox.Show($"TestCommandHandler\n CommandParameter = {e.Parameter}");
+        }
+        private void CanTestCommandHandler(object sender, CanExecuteRoutedEventArgs e) {
+            MessageBox.Show($"CanTestCommandHandler\n CommandParameter = {e.Parameter}");
+            e.CanExecute = true;
+        }
+    }
+    public static class CustomCommands {
+        public static RoutedCommand TestCommand = new RoutedCommand("TestCommand", typeof(CustomCommands));
+        public static RoutedCommand AddCommand = new RoutedCommand("AddCommand", typeof(CustomCommands));
     }
 }

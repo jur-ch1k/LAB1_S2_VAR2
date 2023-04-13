@@ -24,7 +24,15 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid ShowGridLines="True">
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:CustomCommands.AddCommand}"
+            Executed="AddCommandHandler"
+            CanExecute="CanAddCommandHandler" />
+        <CommandBinding Command="{x:Static local:CustomCommands.TestCommand}"
+            Executed="TestCommandHandler"
+            CanExecute="CanTestCommandHandler" />
+    </Window.CommandBindings>
+    <Grid x:Name="grid" ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"></RowDefinition>
             <RowDefinition Height="4*"></RowDefinition>
@@ -119,7 +127,7 @@
 
         <!--Кнопки-->
 
-        <Button Grid.Row="2" Margin="70,10,582,10" Content="Save" Click="SaveButton_Click"/>
+        <Button Grid.Row="2" Margin="70,10,582,10" Content="Save" Click="SaveButton_Click" Command="{x:Static local:CustomCommands.AddCommand}"/>
         <Button Grid.Row="2" Margin="326,11,326,10" Content="RawData from File" Click="LoadButton_Click"/>
         <Button x:Name="create" Grid.Row="2" Margin="582,11,70,10" Content="RawData from Controls" Click="create_Click"/>
         

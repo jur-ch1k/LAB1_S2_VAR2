@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Documents;
 
 namespace LAB1_S2_VAR2 {
-    public class ViewData : INotifyPropertyChanged, IDataErrorInfo,  {
+    public class ViewData : INotifyPropertyChanged, IDataErrorInfo {
         public event PropertyChangedEventHandler PropertyChanged;
         //для RawData
         private int nodesnum;
