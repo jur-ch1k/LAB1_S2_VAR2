@@ -31,19 +31,15 @@ namespace LAB1_S2_VAR2 {
             this.DataContext = viewData;
             
             init_type.ItemsSource = Enum.GetValues(typeof(FRawEnum));
-
         }
 
-        public PlotModel MyModel { get; private set; }
-
         private void LoadButton_Click(object sender, RoutedEventArgs e) {
-            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.FileName = "rawdata";
-            dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text documents (.txt)|*.txt";
-            dialog.ShowDialog();
-
             try {
+                Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+                dialog.FileName = "rawdata";
+                dialog.DefaultExt = ".txt";
+                dialog.Filter = "Text documents (.txt)|*.txt";
+                dialog.ShowDialog();
                 viewData.Load(dialog.FileName);
             }
             catch (Exception ex) {
@@ -55,7 +51,7 @@ namespace LAB1_S2_VAR2 {
                 result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
             }
         }
-        private void CanSaveCreateHandler(object sender, CanExecuteRoutedEventArgs e) {
+        private void CanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {
             if (grid != null) {
                 foreach (FrameworkElement child in grid.Children) {
                     if (Validation.GetHasError(child) == true) {
@@ -68,25 +64,45 @@ namespace LAB1_S2_VAR2 {
             else e.CanExecute = false;
         }
         private void SaveHandler(object sender, ExecutedRoutedEventArgs e) {
-            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "rawdata";
-            dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text documents (.txt)|*.txt";
-            dialog.ShowDialog();
+            try {
+                Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+                dialog.FileName = "rawdata";
+                dialog.DefaultExt = ".txt";
+                dialog.Filter = "Text documents (.txt)|*.txt";
+                dialog.ShowDialog();
 
-            viewData.CreateRawData();
-            viewData.Raw.Save(dialog.FileName);
+                viewData.CreateRawData();
+                viewData.Raw.Save(dialog.FileName);
+            }
+            catch (Exception ex) {
+                string messageBoxText = ex.Message;
+                string caption = "Ошибочка";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+                MessageBoxResult result;
+                result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+            }
         }
         private void LoadHandler(object sender, ExecutedRoutedEventArgs e) {
-            viewData.ExiquteSpline(false);
-            integral.Text = viewData.Spline.IntergralVal.ToString("0.000");
+            try {
+                viewData.ExiquteSpline(false);
+                integral.Text = viewData.Spline.IntergralVal.ToString("0.000");
 
-            string[] info = new string[viewData.NodesNum];
-            for (int i = 0; i < viewData.NodesNum; i++) {
-                info[i] = $"Coord = {viewData.Raw.Coord[i].ToString("0.000")}\nVal = {viewData.Raw.Val[i].ToString("0.000")}";
+                string[] info = new string[viewData.NodesNum];
+                for (int i = 0; i < viewData.NodesNum; i++) {
+                    info[i] = $"Coord = {viewData.Raw.Coord[i].ToString("0.000")}\nVal = {viewData.Raw.Val[i].ToString("0.000")}";
+                }
+                RawData_info.ItemsSource = info;
+                DrawPlot();
             }
-            RawData_info.ItemsSource = info;
-            DrawPlot();
+            catch (Exception ex) {
+                string messageBoxText = ex.Message;
+                string caption = "Ошибочка";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+                MessageBoxResult result;
+                result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+            }
         }
         private void CreateHandler(object sender, ExecutedRoutedEventArgs e) {
             try {

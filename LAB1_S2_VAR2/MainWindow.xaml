@@ -28,13 +28,13 @@
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:CustomCommands.SaveCommand}"
             Executed="SaveHandler"
-            CanExecute="CanSaveCreateHandler" />
+            CanExecute="CanExecuteHandler" />
         <CommandBinding Command="{x:Static local:CustomCommands.LoadCommand}"
             Executed="LoadHandler"
-            CanExecute="CanSaveCreateHandler" />
+            CanExecute="CanExecuteHandler" />
         <CommandBinding Command="{x:Static local:CustomCommands.CreateCommand}"
             Executed="CreateHandler"
-            CanExecute="CanSaveCreateHandler" />
+            CanExecute="CanExecuteHandler" />
     </Window.CommandBindings>
     <Grid x:Name="grid" ShowGridLines="True">
         <Grid.RowDefinitions>

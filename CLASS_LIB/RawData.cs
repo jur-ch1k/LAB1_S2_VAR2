@@ -38,14 +38,9 @@ namespace CLASS_LIB {
                 double step = (Ends[1] - Ends[0]) / (NumOfNodes - 1);
                 if (isUnuform) {
                     Coord[i] = Ends[0] + step * i;
-                    //Val[i] = func(Coord[i]);
                 }
                 else {
                     Coord[i] = new Random().NextDouble() * (Ends[1] - Ends[0]) + Ends[0];
-                    //if (Ends[0] + step * i + new Random().NextDouble() < Ends[1])
-                    //    Coord[i] = Ends[0] + step * i + new Random().NextDouble();
-                    //else
-                    //    Coord[i] = Ends[1];
                 }
                 Val[i] = func(Coord[i]);
             }
