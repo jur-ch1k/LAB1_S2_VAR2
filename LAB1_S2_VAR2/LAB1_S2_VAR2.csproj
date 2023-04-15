@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CLASS_LIB\CLASS_LIB.csproj" />
   </ItemGroup>
 

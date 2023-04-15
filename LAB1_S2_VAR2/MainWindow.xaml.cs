@@ -15,6 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CLASS_LIB;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LAB1_S2_VAR2 {
@@ -28,50 +31,10 @@ namespace LAB1_S2_VAR2 {
             this.DataContext = viewData;
             
             init_type.ItemsSource = Enum.GetValues(typeof(FRawEnum));
+
         }
 
-        public class command : ICommand {
-            public event EventHandler? CanExecuteChanged;
-
-            public bool CanExecute(object? parameter) {
-                throw new NotImplementedException();
-            }
-
-            public void Execute(object? parameter) {
-                throw new NotImplementedException();
-            }
-        }
-
-        private void create_Click(object sender, RoutedEventArgs e) {
-            try {
-                viewData.ExiquteSpline();
-                integral.Text = viewData.Spline.IntergralVal.ToString();
-                string[] info = new string[viewData.NodesNum];
-                for (int i = 0; i < viewData.NodesNum; i++) {
-                    info[i] = $"Coord = {viewData.Raw.Coord[i].ToString("0.000")}\nVal = {viewData.Raw.Val[i].ToString("0.000")}";
-                }
-                RawData_info.ItemsSource = info;
-            }
-            catch (Exception ex){
-                string messageBoxText = ex.Message;
-                string caption = "Ошибочка";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-                MessageBoxResult result;
-                result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
-            }
-        }
-
-        private void SaveButton_Click(object sender, RoutedEventArgs e) {
-            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "rawdata";
-            dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text documents (.txt)|*.txt";
-            dialog.ShowDialog();
-
-            viewData.CreateRawData();
-            viewData.Raw.Save(dialog.FileName);
-        }
+        public PlotModel MyModel { get; private set; }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e) {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
@@ -82,14 +45,6 @@ namespace LAB1_S2_VAR2 {
 
             try {
                 viewData.Load(dialog.FileName);
-                viewData.ExiquteSpline(false);
-                integral.Text = viewData.Spline.IntergralVal.ToString();
-
-                string[] info = new string[viewData.NodesNum];
-                for (int i = 0; i < viewData.NodesNum; i++) {
-                    info[i] = $"Coord = {viewData.Raw.Coord[i].ToString("0.000")}\nVal = {viewData.Raw.Val[i].ToString("0.000")}";
-                }
-                RawData_info.ItemsSource = info;
             }
             catch (Exception ex) {
                 string messageBoxText = ex.Message;
@@ -100,7 +55,7 @@ namespace LAB1_S2_VAR2 {
                 result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
             }
         }
-        private void CanAddCommandHandler(object sender, CanExecuteRoutedEventArgs e) {
+        private void CanSaveCreateHandler(object sender, CanExecuteRoutedEventArgs e) {
             if (grid != null) {
                 foreach (FrameworkElement child in grid.Children) {
                     if (Validation.GetHasError(child) == true) {
@@ -112,20 +67,92 @@ namespace LAB1_S2_VAR2 {
             }
             else e.CanExecute = false;
         }
-        private void AddCommandHandler(object sender, ExecutedRoutedEventArgs e) {
-            throw new NotImplementedException();
+        private void SaveHandler(object sender, ExecutedRoutedEventArgs e) {
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = "rawdata";
+            dialog.DefaultExt = ".txt";
+            dialog.Filter = "Text documents (.txt)|*.txt";
+            dialog.ShowDialog();
+
+            viewData.CreateRawData();
+            viewData.Raw.Save(dialog.FileName);
+        }
+        private void LoadHandler(object sender, ExecutedRoutedEventArgs e) {
+            viewData.ExiquteSpline(false);
+            integral.Text = viewData.Spline.IntergralVal.ToString("0.000");
+
+            string[] info = new string[viewData.NodesNum];
+            for (int i = 0; i < viewData.NodesNum; i++) {
+                info[i] = $"Coord = {viewData.Raw.Coord[i].ToString("0.000")}\nVal = {viewData.Raw.Val[i].ToString("0.000")}";
+            }
+            RawData_info.ItemsSource = info;
+            DrawPlot();
+        }
+        private void CreateHandler(object sender, ExecutedRoutedEventArgs e) {
+            try {
+                viewData.ExiquteSpline();
+                integral.Text = viewData.Spline.IntergralVal.ToString("0.000");
+                string[] info = new string[viewData.NodesNum];
+                for (int i = 0; i < viewData.NodesNum; i++) {
+                    info[i] = $"Coord = {viewData.Raw.Coord[i].ToString("0.000")}\nVal = {viewData.Raw.Val[i].ToString("0.000")}";
+                }
+                RawData_info.ItemsSource = info;
+                DrawPlot();
+            }
+            catch (Exception ex) {
+                string messageBoxText = ex.Message;
+                string caption = "Ошибочка";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+                MessageBoxResult result;
+                result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+            }
         }
 
-        private void TestCommandHandler(object sender, ExecutedRoutedEventArgs e) {
-            MessageBox.Show($"TestCommandHandler\n CommandParameter = {e.Parameter}");
-        }
-        private void CanTestCommandHandler(object sender, CanExecuteRoutedEventArgs e) {
-            MessageBox.Show($"CanTestCommandHandler\n CommandParameter = {e.Parameter}");
-            e.CanExecute = true;
+        private void DrawPlot() {
+            PlotModel model = new PlotModel();
+            model.Axes.Add(new LinearAxis() {
+                Position = AxisPosition.Bottom,
+                Minimum = viewData.LEnd,
+                Maximum = viewData.REnd,
+                Title = "Coord"
+            });
+            model.Axes.Add(new LinearAxis() {
+                Position = AxisPosition.Left,
+                Minimum = viewData.Spline.SplineList.Min(x => x.Val),
+                Maximum = viewData.Spline.SplineList.Max(x => x.Val),
+                Title = "Value"
+            });
+
+            LineSeries rawline = new LineSeries() {
+                Title = "RawData",
+                Color = OxyColors.Transparent,
+                MarkerType = MarkerType.Circle,
+                MarkerFill = OxyColors.Black
+            };
+            for (int i = 0; i < viewData.NodesNum; i++) {
+                rawline.Points.Add(new DataPoint(viewData.Raw.Coord[i], viewData.Raw.Val[i]));
+            }
+
+            LineSeries splineline = new LineSeries() {
+                Title = "SplineData",
+                Color = OxyColors.Green,
+            };
+            for (int i = 0; i < viewData.SplineNodesNum; i++) {
+                splineline.Points.Add(new DataPoint(
+                    viewData.Spline.SplineList[i].Coord,
+                    viewData.Spline.SplineList[i].Val
+                    ));
+            }
+
+            model.Series.Add(splineline);
+            model.Series.Add(rawline);
+            plot.Model = model;
         }
     }
     public static class CustomCommands {
-        public static RoutedCommand TestCommand = new RoutedCommand("TestCommand", typeof(CustomCommands));
-        public static RoutedCommand AddCommand = new RoutedCommand("AddCommand", typeof(CustomCommands));
+        public static RoutedCommand SaveCommand = new RoutedCommand("SaveCommand", typeof(CustomCommands));
+        public static RoutedCommand LoadCommand = new RoutedCommand("LoadCommand", typeof(CustomCommands));
+        public static RoutedCommand CreateCommand = new RoutedCommand("AddCommand", typeof(CustomCommands));
     }
 }

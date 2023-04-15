@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:local="clr-namespace:LAB1_S2_VAR2"
         mc:Ignorable="d"
         Title="LAB1_S2_VAR2" Height="450" Width="800" >
@@ -25,23 +26,27 @@
         </Style>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static local:CustomCommands.AddCommand}"
-            Executed="AddCommandHandler"
-            CanExecute="CanAddCommandHandler" />
-        <CommandBinding Command="{x:Static local:CustomCommands.TestCommand}"
-            Executed="TestCommandHandler"
-            CanExecute="CanTestCommandHandler" />
+        <CommandBinding Command="{x:Static local:CustomCommands.SaveCommand}"
+            Executed="SaveHandler"
+            CanExecute="CanSaveCreateHandler" />
+        <CommandBinding Command="{x:Static local:CustomCommands.LoadCommand}"
+            Executed="LoadHandler"
+            CanExecute="CanSaveCreateHandler" />
+        <CommandBinding Command="{x:Static local:CustomCommands.CreateCommand}"
+            Executed="CreateHandler"
+            CanExecute="CanSaveCreateHandler" />
     </Window.CommandBindings>
     <Grid x:Name="grid" ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"></RowDefinition>
             <RowDefinition Height="4*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
+
         </Grid.RowDefinitions>
-        
+
         <!--Ввод данных-->
-        <Label Margin="197,10,479,147" Content="Настройка RawData"/>
-        <Label Margin="593,10,71,147" Content="Настройка SplineData"/>
+        <Label Margin="183,10,479,147" Content="Настройка RawData"/>
+        <Label Margin="580,10,71,147" Content="Настройка SplineData"/>
 
         <Label  Grid.Row="0" Margin="10,58,692,99" Width="NaN" Content="Число узлов:" />
         <TextBox x:Name="node_num" Grid.Row="0"  Height="NaN" Margin="113,61,565,102" Width="NaN">
@@ -63,7 +68,7 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-            <Label Grid.Row="0" Margin="10,140,692,17" Width="NaN" Content="Прав. граница:" />
+        <Label Grid.Row="0" Margin="10,140,692,17" Width="NaN" Content="Прав. граница:" />
         <TextBox x:Name="right_end" Grid.Row="0"  Height="NaN" Margin="113,143,565,21" Width="NaN">
             <TextBox.Text>
                 <Binding Path="REnd" NotifyOnValidationError="True">
@@ -99,17 +104,17 @@
                 <MultiBinding Converter="{StaticResource arr_converter}">
                     <Binding Path="LeftSndDer"/>
                     <Binding Path="RightSndDer"/>
-                 </MultiBinding>
+                </MultiBinding>
             </TextBox.Text>
         </TextBox>
-        
+
 
         <!--Вывод данных-->
 
         <Label Content="Значения RawData:" Margin="10,10,637,147" Grid.Row="1"/>
-        <ListBox x:Name="RawData_info" Grid.Row="1" Margin="10,51,637,15"/>
+        <ListBox x:Name="RawData_info" Grid.Row="1" Margin="10,39,637,27"/>
         <Label Content="Значения SplineData:" Margin="183,10,464,147" Grid.Row="1"/>
-        <ListBox x:Name="SplineData_info" Grid.Row="1" Margin="183,51,464,15" ItemsSource="{Binding Spline.SplineList}">
+        <ListBox x:Name="SplineData_info" Grid.Row="1" Margin="183,39,464,27" ItemsSource="{Binding Spline.SplineList}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -121,15 +126,18 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Label Content="Значения Выбора:" Margin="361,10,286,147" Grid.Row="1"/>
-        <TextBlock x:Name="SplineData_selected" Grid.Row="1" Margin="361,51,286,15" Text="{Binding ElementName=SplineData_info, Path=SelectedItem, Converter={StaticResource splinelist_converter}}"/>
-        <Label Content="Значение интеграла:" Margin="542,10,105,147" Grid.Row="1"/>
-        <TextBlock x:Name="integral" Grid.Row="1" Margin="542,51,105,15"/>
+        <TextBlock x:Name="SplineData_selected" Grid.Row="1" Margin="361,39,286,79" Text="{Binding ElementName=SplineData_info, Path=SelectedItem, Converter={StaticResource splinelist_converter}}"/>
+        <Label Content="Значение интеграла:" Margin="361,114,286,43" Grid.Row="1"/>
+        <TextBlock x:Name="integral" Margin="361,150,286,13" Grid.Row="1"/>
 
         <!--Кнопки-->
 
-        <Button Grid.Row="2" Margin="70,10,582,10" Content="Save" Click="SaveButton_Click" Command="{x:Static local:CustomCommands.AddCommand}"/>
-        <Button Grid.Row="2" Margin="326,11,326,10" Content="RawData from File" Click="LoadButton_Click"/>
-        <Button x:Name="create" Grid.Row="2" Margin="582,11,70,10" Content="RawData from Controls" Click="create_Click"/>
-        
+        <Button Grid.Row="2" Margin="70,10,582,10" Content="Save" Command="{x:Static local:CustomCommands.SaveCommand}"/>
+        <Button Grid.Row="2" Margin="326,11,326,10" Content="RawData from File" Click="LoadButton_Click" Command="{x:Static local:CustomCommands.LoadCommand}"/>
+        <Button x:Name="create" Grid.Row="2" Margin="582,11,70,10" Content="RawData from Controls" Command="{x:Static local:CustomCommands.CreateCommand}"/>
+
+        <!--Графики-->
+
+        <oxy:PlotView x:Name="plot" Margin="514,0,0,48" Grid.Row="1" Grid.RowSpan="2"/>
     </Grid>
 </Window>

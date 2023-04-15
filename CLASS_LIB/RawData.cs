@@ -36,8 +36,10 @@ namespace CLASS_LIB {
             Val = new double[numOfNodes];
             for ( int i = 0; i < numOfNodes - 1; i++ ) {
                 double step = (Ends[1] - Ends[0]) / (NumOfNodes - 1);
-                if (isUnuform)
+                if (isUnuform) {
                     Coord[i] = Ends[0] + step * i;
+                    //Val[i] = func(Coord[i]);
+                }
                 else {
                     Coord[i] = new Random().NextDouble() * (Ends[1] - Ends[0]) + Ends[0];
                     //if (Ends[0] + step * i + new Random().NextDouble() < Ends[1])
@@ -50,7 +52,10 @@ namespace CLASS_LIB {
             Coord[NumOfNodes - 1] = ends[1];
             Val[NumOfNodes - 1] = func(Coord[NumOfNodes - 1]);
             if (!isUnuform) {
-               Coord = Coord.OrderBy(x => x).ToArray();
+                Coord = Coord.OrderBy(x => x).ToArray();
+                Val = Val.OrderBy(x => x).ToArray();
+                Coord[0] = Ends[0];
+                Val[0] = func(Coord[0]);
             }
         }
         public RawData(string filename) {
@@ -129,6 +134,6 @@ namespace CLASS_LIB {
     static public class Del_Func {
         static public double Linear(double x) { return x; }
         static public double Cubic(double x) { return x * x * x; }
-        static public double Random(double x) { return new Random().NextDouble(); }
+        static public double Random(double x) { return new Random().NextInt64(10) + new Random().NextDouble(); }
     }
 }

@@ -66,7 +66,7 @@ namespace CLASS_LIB {
             IntergralVal = integral_resault[0];
 
         }
-        [DllImport("C:\\Users\\5064408\\source\\repos\\LAB1_S2_VAR2\\x64\\Debug\\MKL_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("C:\\Users\\jur_chik\\Desktop\\wpf_test\\LAB1_S2_VAR2\\x64\\Debug\\MKL_DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern
             void MKL_func(
                 int nx,

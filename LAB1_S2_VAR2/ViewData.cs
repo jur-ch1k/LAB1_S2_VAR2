@@ -14,6 +14,7 @@ using System.Windows.Documents;
 namespace LAB1_S2_VAR2 {
     public class ViewData : INotifyPropertyChanged, IDataErrorInfo {
         public event PropertyChangedEventHandler PropertyChanged;
+
         //для RawData
         private int nodesnum;
         public int NodesNum { 
@@ -82,8 +83,8 @@ namespace LAB1_S2_VAR2 {
                             error = "Число узлов должно быть >= 2!";
                         break;
                     case "SplineNodesNum":
-                        if (SplineNodesNum < 2)
-                            error = "Число узлов должно быть >= 2!";
+                        if (SplineNodesNum < 3)
+                            error = "Число узлов должно быть >= 3!";
                         break;
                     case "LEnd":
                         if (LEnd >= REnd)
