@@ -71,7 +71,9 @@ namespace LAB1_S2_VAR2 {
                 dialog.Filter = "Text documents (.txt)|*.txt";
                 dialog.ShowDialog();
 
-                viewData.CreateRawData();
+                if (viewData.Raw == null)
+                    viewData.CreateRawData();
+                
                 viewData.Raw.Save(dialog.FileName);
             }
             catch (Exception ex) {
